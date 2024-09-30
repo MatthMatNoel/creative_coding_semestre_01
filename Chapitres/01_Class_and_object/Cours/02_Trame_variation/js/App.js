@@ -24,16 +24,16 @@ export default class App {
   // }
 
   createGrid() {
-    let step = 10;
-    let radius = 25;
+    let step = 30;
+    let radius = 10;
     let spaceX = window.innerWidth / step;
     let spaceY = window.innerHeight / step;
 
     let monCercle = new Circle(this.ctx);
 
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
-        monCercle.draw(i * spaceX + radius, j * spaceY + radius, radius);
+    for (let i = 0; i < step + 1; i++) {
+      for (let j = 0; j < step + 1; j++) {
+        monCercle.draw(i * spaceX, j * spaceY, radius);
       }
     }
   }
