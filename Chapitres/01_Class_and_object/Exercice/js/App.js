@@ -42,7 +42,7 @@ export default class App {
         }
       }
 
-      time += 0.05;
+      time += 0.01;
       requestAnimationFrame(animate);
     };
 
