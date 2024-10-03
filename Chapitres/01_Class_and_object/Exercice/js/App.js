@@ -14,8 +14,6 @@ export default class App {
     let space = maxDimension / step;
 
     let point = new Point(ctx);
-    let lastFrameTime = 0;
-    const frameDuration = 1000 / 60;
 
     // Calculate the starting positions to center the grid
     let startX = canvas.getWidth() - maxDimension;
@@ -23,13 +21,7 @@ export default class App {
 
     let time = 0;
 
-    const animate = (timestamp) => {
-      if (timestamp - lastFrameTime < frameDuration) {
-        requestAnimationFrame(animate);
-        return;
-      }
-      lastFrameTime = timestamp;
-
+    const animate = () => {
       ctx.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
       for (let i = 0; i < step + 1; i++) {
@@ -41,11 +33,10 @@ export default class App {
           point.draw(startX + i * space, startY + j * space, animatedRadius);
         }
       }
-
       time += 0.01;
-      requestAnimationFrame(animate);
     };
 
-    requestAnimationFrame(animate);
+    const interval = 1000 / 60; // 60fps
+    setInterval(animate, interval);
   }
 }
