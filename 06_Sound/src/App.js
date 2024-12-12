@@ -107,7 +107,7 @@ export default class App extends BaseApp {
     const text = "O";
 
     // Add new letter at regular intervals
-    const letterSpacing = fontWidth * 5; // Adjust the multiplier as needed
+    const letterSpacing = fontWidth * 6; // Adjust the multiplier as needed
     if (
       this.letters.length === 0 ||
       this.letters[this.letters.length - 1].x < this.width - letterSpacing
@@ -137,7 +137,6 @@ export default class App extends BaseApp {
       this.ctx.fillText(text, -textWidth / 2, textHeight / 2);
       this.ctx.restore();
 
-      // Remove letters that have moved off screen
       if (letter.x < -textWidth) {
         this.letters.splice(index, 1);
       }
@@ -148,14 +147,43 @@ export default class App extends BaseApp {
     this.ctx.globalCompositeOperation = "difference";
     this.ctx.beginPath();
     this.ctx.moveTo(0, this.height / 2);
+
+    if (!this.smoothedWaveArray) {
+      this.smoothedWaveArray = new Float32Array(this.waveArray.length);
+    }
+
     for (let i = 0; i < this.waveArray.length; i++) {
-      const y = (this.waveArray[i] / 128) * this.height - this.height / 2;
-      this.ctx.lineTo(i * waveSpace, y);
+      this.smoothedWaveArray[i] = this.lerp(
+        this.smoothedWaveArray[i] || 0,
+        this.waveArray[i],
+        0.2
+      );
+    }
+
+    for (let i = 1; i < this.smoothedWaveArray.length - 2; i++) {
+      const xc = (i * waveSpace + (i + 1) * waveSpace) / 2;
+      const yc =
+        ((this.smoothedWaveArray[i] / 128) * this.height -
+          this.height / 2 +
+          (this.smoothedWaveArray[i + 1] / 128) * this.height -
+          this.height / 2) /
+        2;
+      this.ctx.quadraticCurveTo(
+        i * waveSpace,
+        (this.smoothedWaveArray[i] / 128) * this.height - this.height / 2,
+        xc,
+        yc
+      );
     }
     this.ctx.strokeStyle = "white";
-    this.ctx.lineWidth = 2;
+    this.ctx.lineWidth = 3;
     this.ctx.stroke();
 
     requestAnimationFrame(this.draw.bind(this));
+  }
+
+  // Linear interpolation function
+  lerp(start, end, amt) {
+    return (1 - amt) * start + amt * end;
   }
 }
