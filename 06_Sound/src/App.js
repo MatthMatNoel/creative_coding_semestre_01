@@ -160,20 +160,10 @@ export default class App extends BaseApp {
       );
     }
 
-    for (let i = 1; i < this.smoothedWaveArray.length - 2; i++) {
-      const xc = (i * waveSpace + (i + 1) * waveSpace) / 2;
-      const yc =
-        ((this.smoothedWaveArray[i] / 128) * this.height -
-          this.height / 2 +
-          (this.smoothedWaveArray[i + 1] / 128) * this.height -
-          this.height / 2) /
-        2;
-      this.ctx.quadraticCurveTo(
-        i * waveSpace,
-        (this.smoothedWaveArray[i] / 128) * this.height - this.height / 2,
-        xc,
-        yc
-      );
+    for (let i = 0; i < this.smoothedWaveArray.length; i++) {
+      const y =
+        (this.smoothedWaveArray[i] / 128) * this.height - this.height / 2;
+      this.ctx.lineTo(i * waveSpace, y);
     }
     this.ctx.strokeStyle = "white";
     this.ctx.lineWidth = 3;
@@ -182,8 +172,8 @@ export default class App extends BaseApp {
     requestAnimationFrame(this.draw.bind(this));
   }
 
-  // Linear interpolation function
-  lerp(start, end, amt) {
-    return (1 - amt) * start + amt * end;
+  // Lerp function
+  lerp(start, end, ratio) {
+    return start + ratio * (end - start);
   }
 }
