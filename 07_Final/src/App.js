@@ -75,18 +75,25 @@ export default class App extends BaseApp {
     this.particles.forEach((particle) => {
       this.particlesSpawnY = 0;
       this.particlesSpawnX = Math.random() * this.width;
+
+      // Apply repulsion force from face mesh points
+      this.faceMeshPoints.forEach((point) => {
+        const x = point.x * this.width;
+        const y = point.y * this.height;
+        particle.repulse(x, y);
+      });
     });
 
-    // Spawn particles at eye points every 10 frames
-    if (this.frameCount % 10 === 0) {
-      this.faceMeshPoints.forEach((point, index) => {
-        if (index === 468 || index === 473) {
-          const x = point.x * this.width;
-          const y = point.y * this.height;
-          this.particles.push(new Particle(x, y));
-        }
-      });
-    }
+    // // Spawn particles at eye points every 10 frames
+    // if (this.frameCount % 10 === 0) {
+    //   this.faceMeshPoints.forEach((point, index) => {
+    //     if (index === 468 || index === 473) {
+    //       const x = point.x * this.width;
+    //       const y = point.y * this.height;
+    //       this.particles.push(new Particle(x, y));
+    //     }
+    //   });
+    // }
 
     this.particles = this.particles.filter((particle) => {
       particle.update();
@@ -104,30 +111,41 @@ export default class App extends BaseApp {
 
     // Draw face mesh points
     this.faceMeshPoints.forEach((point, index) => {
-      if (index === 468 || index === 473) {
-        // Indices for the eyes
-        this.ctx.fillStyle = "red";
-        this.ctx.beginPath();
-        this.ctx.arc(
-          point.x * this.width,
-          point.y * this.height,
-          20,
-          0,
-          2 * Math.PI
-        );
-        this.ctx.fill();
-      } else {
-        this.ctx.fillStyle = "rgb(0, 255, 0)";
-        this.ctx.beginPath();
-        this.ctx.arc(
-          point.x * this.width,
-          point.y * this.height,
-          1,
-          0,
-          2 * Math.PI
-        );
-        this.ctx.fill();
-      }
+      this.ctx.fillStyle = "rgb(0, 255, 0)";
+      this.ctx.beginPath();
+      this.ctx.arc(
+        point.x * this.width,
+        point.y * this.height,
+        1,
+        0,
+        2 * Math.PI
+      );
+      this.ctx.fill();
+
+      // if (index === 468 || index === 473) {
+      //   // Indices for the eyes
+      //   this.ctx.fillStyle = "red";
+      //   this.ctx.beginPath();
+      //   this.ctx.arc(
+      //     point.x * this.width,
+      //     point.y * this.height,
+      //     20,
+      //     0,
+      //     2 * Math.PI
+      //   );
+      //   this.ctx.fill();
+      // } else {
+      //   this.ctx.fillStyle = "rgb(0, 255, 0)";
+      //   this.ctx.beginPath();
+      //   this.ctx.arc(
+      //     point.x * this.width,
+      //     point.y * this.height,
+      //     1,
+      //     0,
+      //     2 * Math.PI
+      //   );
+      //   this.ctx.fill();
+      // }
     });
   }
 }

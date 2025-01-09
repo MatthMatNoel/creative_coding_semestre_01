@@ -64,6 +64,25 @@ export default class Particle {
   }
 
   /**
+   * Applique une force de répulsion si la particule est proche d'un point donné
+   * @param {number} x - Position en X du point de répulsion
+   * @param {number} y - Position en Y du point de répulsion
+   */
+  repulse(x, y) {
+    const dx = this.x - x;
+    const dy = this.y - y;
+    const distance = Math.hypot(dx, dy);
+    const minDistance = 50; // Distance minimale pour appliquer la répulsion
+
+    if (distance < minDistance) {
+      const angle = Math.atan2(dy, dx);
+      const force = (minDistance - distance) / minDistance;
+      this.vx += Math.cos(angle) * force;
+      this.vy += Math.sin(angle) * force;
+    }
+  }
+
+  /**
    * Dessine la particule sur le canvas
    * La couleur change selon si la particule est repoussée ou non
    * @param {CanvasRenderingContext2D} ctx - Le contexte de rendu 2D
