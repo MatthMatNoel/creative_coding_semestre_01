@@ -13,13 +13,13 @@ export default class Point {
     const clampedRadius = Math.max(minRadius, Math.min(maxRadius, radius));
     const ratio = (clampedRadius - minRadius) / (maxRadius - minRadius);
 
-    const red = 255;
+    const red = 0;
     const green = Math.floor(255 * ratio);
     const blue = Math.floor(255 * (1 - ratio));
 
     this.ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
 
-    this.ctx.font = `${radius}px monospace`;
+    this.ctx.font = `${radius}px futura`;
 
     this.ctx.fillText(`${Math.floor(radius)}`, x, y);
   }

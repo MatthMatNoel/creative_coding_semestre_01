@@ -10,7 +10,7 @@ export default class Letter {
   }
 
   getRandomCharacter() {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const characters = "M";
     return characters[Math.floor(Math.random() * characters.length)];
   }
 
